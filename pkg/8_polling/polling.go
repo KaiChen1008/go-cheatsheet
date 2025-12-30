@@ -19,7 +19,7 @@ func ForeverPolling(ctx context.Context) {
 		// it is okay if duration of checkStatus > 1sec.
 		// <-ticker.C and checkStatus are done simultaneously
 		case <-ticker.C:
-			checkStatus() // 同步執行，不會重疊
+			checkStatus()
 
 		case <-ctx.Done():
 			return
@@ -36,6 +36,7 @@ func Polling(ctx context.Context, maxAttampts int) {
 
 	ticker := time.NewTicker(time.Second)
 	defer ticker.Stop()
+
 	for range maxAttampts - 1 {
 		select {
 		case <-ticker.C:

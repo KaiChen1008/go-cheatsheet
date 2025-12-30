@@ -14,7 +14,7 @@
 #### 2. concurrency & 3. race condition
 - use thread-safe packages as possble, like sync.Map
 - handle Map.Load/Store carefully, use LoadOrStore to prevent race conditions.
-```
+```go
 sm := sync.Map{}
 if v, loaded := sm.LoadOrStore(key, val); loaded {
     println("key exists!")
