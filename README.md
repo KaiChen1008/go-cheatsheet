@@ -1,5 +1,4 @@
-# Go-Cheatsheet
-[toc]
+# Go Cheatsheet
 
 ### Additional References
 - nice to read
