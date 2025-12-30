@@ -44,6 +44,6 @@ func Run() {
 	close(results)
 
 	for r := range results {
-		fmt.Println("Result:", r)
+		fmt.Println("result:", r)
 	}
 }

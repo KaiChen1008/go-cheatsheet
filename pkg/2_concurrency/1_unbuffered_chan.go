@@ -1,6 +1,6 @@
 package concurrency
 
-func main() {
+func UnbufferedChannel() {
 	ch := make(chan string) // unbuffered
 
 	go push("Moe", ch)

@@ -13,7 +13,8 @@ func SyncMap() {
 		wg.Add(1)
 		go func(i int) {
 			defer wg.Done()
-			key := fmt.Sprintf("task%d", i)
+
+			key := fmt.Sprintf("task-%d", i)
 
 			// sm.Store(key, i)
 			if _, loaded := sm.LoadOrStore(key, i); loaded { // use LoadOrStore to handle race conditions.
