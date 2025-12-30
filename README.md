@@ -21,4 +21,23 @@ if v, loaded := sm.LoadOrStore(key, val); loaded {
 }
 ```
 
+#### 7. error & 8. polling
+- wrap an error
+```go
+wrapErr := fmt.Errorf("%v: %w", msg, err) // use %w for wrap error
+```
 
+- use select & ticker for error handing and polling
+```go
+ticker = time.NewTicker(time.Secodn)
+defer ticker.Stop()
+
+for range maxAttempts {
+    select {
+    case <-ticker.C:
+        // do something
+    case <-ctx.Done():
+        return ctx.Err()
+    }
+}
+```
