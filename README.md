@@ -1,4 +1,5 @@
 # Go-Cheatsheet
+[toc]
 
 ### Additional References
 - nice to read
@@ -9,3 +10,8 @@
     - [interview - 1](https://medium.com/@maskwork77.dev/golang-code-interview-record-72f9fe32f7e3)
     - [interview - 2](https://blog.csdn.net/2401_87300302/article/details/142428512)
     - [interview - 3](https://www.zhihu.com/tardis/bd/art/519979757)
+
+### Some Notes for Live Coding Interview
+#### 2. concurrency & 3. race condition
+- use sync.Map instead of map
+- handle Map.Load/Store carefully, use LoadOrStore to prevent race conditions.

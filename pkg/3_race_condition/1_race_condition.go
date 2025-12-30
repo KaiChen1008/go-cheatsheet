@@ -11,7 +11,7 @@ func Inc() {
 	counter++ // race
 }
 
-// correct way 1
+// correct way 1 - use mutex
 type Counter struct {
 	mu sync.Mutex
 	n  int
@@ -23,7 +23,7 @@ func (c *Counter) Inc() {
 	c.n++
 }
 
-// correct way 2
+// correct way 2 - use atomic
 func IncAotmic() {
 	atomic.AddInt64(&counter, 1)
 }
