@@ -12,5 +12,13 @@
 
 ### Some Notes for Live Coding Interview
 #### 2. concurrency & 3. race condition
-- use sync.Map instead of map
+- use thread-safe packages as possble, like sync.Map
 - handle Map.Load/Store carefully, use LoadOrStore to prevent race conditions.
+```
+sm := sync.Map{}
+if v, loaded := sm.LoadOrStore(key, val); loaded {
+    println("key exists!")
+}
+```
+
+

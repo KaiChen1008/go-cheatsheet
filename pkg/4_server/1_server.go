@@ -12,6 +12,9 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// it is a row http server. use gin in a production environment.
+// cmd/server is a gin example.
+
 func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/health", healthHandler)
