@@ -51,5 +51,4 @@ func main() {
 		logrus.Fatalf("Failed to shutdown server: %v", err)
 	}
 	logrus.Println("Server shutdown")
-
 }
