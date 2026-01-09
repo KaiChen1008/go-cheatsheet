@@ -2,9 +2,10 @@ package main
 
 import (
 	"context"
+	"net"
 	"net/http"
-	"os"
 	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/Depado/ginprom"
@@ -21,7 +22,6 @@ func main() {
 
 	// gin.New() unlike gin.Default(), (conceptually) does not attach any middleware to the Engine.
 	r := gin.New()
-
 	p := ginprom.New(ginprom.Engine(r)) // for prometheus
 	r.Use(
 		p.Instrument(),
@@ -36,19 +36,20 @@ func main() {
 	// add handlers
 	// r = delivery.NewRouter(r)
 
+	// graceful shutdown ref: githug.com/gin-gonic/examples/graceful-shutdown/graceful-shutdown/notify-with-context/server.go
+	// Create context that listens for the interrupt signal from the OS.
+	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
+	defer stop()
+
 	svr := &http.Server{
 		Addr:    addr,
 		Handler: r,
 	}
 
-	// TODO why
-	// ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
-	// defer stop()
-	// svr.BaseContext = func(net.Listener) context.Context {
-	// 	return ctx
-	// }
+	svr.BaseContext = func(net.Listener) context.Context {
+		return ctx // for canceling running jobs
+	}
 
-	// graceful shutdown
 	go func() {
 		logrus.Println("Serving requests...")
 		if err := svr.ListenAndServe(); err != nil && err != http.ErrServerClosed {
@@ -56,23 +57,17 @@ func main() {
 		}
 	}()
 
-	// TODO why sigutil.AbortContext()
-	// ctx, cancel := sigutil.AbortContext()
-	// defer cancel()
-	// <-ctx.Done()
-
-	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, os.Interrupt)
-	<-quit
-
+	// Listen for the interrupt signal.
+	<-ctx.Done()
 	logrus.Info("Shutting down server...")
-	shutdownCtx, cancelShutdown := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancelShutdown()
-	if err := svr.Shutdown(shutdownCtx); err != nil {
+
+	// The context is used to inform the server it has 5 seconds to finish
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := svr.Shutdown(ctx); err != nil {
 		logrus.Fatalf("Failed to shutdown server: %v", err)
 	}
 	logrus.Println("Server shutdown")
-
 }
 
 func initConfig() {
