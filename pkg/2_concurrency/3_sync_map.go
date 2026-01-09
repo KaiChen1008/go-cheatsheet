@@ -11,7 +11,10 @@ func SyncMap() {
 	wg := sync.WaitGroup{}
 	for i := range 5 {
 		wg.Add(1)
-		go func(i int) {
+
+		// pitfall fixed: https://medium.com/@krisguttenbergovitz/go-1-22s-loop-variable-fix-solving-a-decade-old-gotcha-and-modern-concurrency-pitfalls-69aa4eb0b8a1
+		// no need i := i or fun(i int) {...}(i)
+		go func() {
 			defer wg.Done()
 
 			key := fmt.Sprintf("task-%d", i)
@@ -20,7 +23,7 @@ func SyncMap() {
 			if _, loaded := sm.LoadOrStore(key, i); loaded { // use LoadOrStore to handle race conditions.
 				println("key exists")
 			}
-		}(i)
+		}()
 	}
 
 	wg.Wait()
