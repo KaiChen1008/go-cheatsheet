@@ -2,7 +2,7 @@
 
 #### 2. concurrency & 3. race condition
 
-* use thread-safe packages if possble, like sync.Map
+* use thread-safe packages if possble, like `sync.Map`.
 * handle `Map.Load/Store` carefully, use `LoadOrStore` to prevent race conditions.
 
 ```go
@@ -14,13 +14,13 @@ if v, loaded := sm.LoadOrStore(key, val); loaded {
 
 #### 7. error & 8. polling
 
-* wrap an error
+* wrap errors.
 
 ```go
 wrapErr := fmt.Errorf("%v: %w", msg, err) // use %w for wrap error
 ```
 
-* use select & ticker for error handing and polling
+* use `select` & `ticker` for error handing and polling.
 
 ```go
 ticker = time.NewTicker(time.Secodn)
