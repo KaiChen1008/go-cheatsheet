@@ -36,8 +36,8 @@ func main() {
 	// add handlers
 	// r = delivery.NewRouter(r)
 
-	// graceful shutdown ref: githug.com/gin-gonic/examples/graceful-shutdown/graceful-shutdown/notify-with-context/server.go
-	// Create context that listens for the interrupt signal from the OS.
+	// ref: github.com/gin-gonic/examples/tree/master/graceful-shutdown/graceful-shutdown/notify-with-context
+	// create context that listens for the interrupt signal from the OS.
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 
@@ -61,7 +61,7 @@ func main() {
 	<-ctx.Done()
 	logrus.Info("Shutting down server...")
 
-	// The context is used to inform the server it has 5 seconds to finish
+	// this context is used to inform the server that it has 5 seconds to finish
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := svr.Shutdown(ctx); err != nil {
