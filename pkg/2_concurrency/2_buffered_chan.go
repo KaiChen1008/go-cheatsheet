@@ -7,7 +7,7 @@ func BufferedChannel() {
 	ch <- 3 // fatal error: all goroutines are asleep -> deadlock!
 }
 
-func CloseAChannel() {
+func CloseChannel() {
 	ch := make(chan int, 2)
 
 	go func() {
@@ -26,6 +26,6 @@ func CloseAChannel() {
 /*
 The loop for i := range c receives values from the channel repeatedly until it is closed.
 
-Note: Only the sender should close a channel, never the receiver. Sending on a closed channel will cause a panic.
-Another note: Channels aren't like files; you don't usually need to close them. Closing is only necessary when the receiver must be told there are no more values coming, such as to terminate a range loop.
+Note 1: Only the sender should close a channel, never the receiver. Sending on a closed channel will cause a panic.
+Note 2: Channels aren't like files; you don't usually need to close them. Closing is only necessary when the receiver must be told there are no more values coming, such as to terminate a range loop.
 */

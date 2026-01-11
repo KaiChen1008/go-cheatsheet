@@ -14,13 +14,12 @@ func SyncMap() {
 
 		// pitfall fixed: https://medium.com/@krisguttenbergovitz/go-1-22s-loop-variable-fix-solving-a-decade-old-gotcha-and-modern-concurrency-pitfalls-69aa4eb0b8a1
 		// no need i := i or fun(i int) {...}(i)
+
 		go func() {
 			defer wg.Done()
 
-			key := fmt.Sprintf("task-%d", i)
-
-			// sm.Store(key, i)
-			if _, loaded := sm.LoadOrStore(key, i); loaded { // use LoadOrStore to handle race conditions.
+			// sm.Store(i, i)
+			if _, loaded := sm.LoadOrStore(i, i); loaded { // use LoadOrStore to handle race conditions.
 				println("key exists")
 			}
 		}()
