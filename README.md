@@ -1,18 +1,9 @@
 # Go Cheatsheet
 
-### Notes for Coding Interviews
-
-#### Common
-
-* 深呼吸，不要緊張。
-* 如果我卡在某個地方，先寫 TODO 繼續。
-* 這裡可能有 race condition，先標記。
-* 時間不夠的話，先實作核心邏輯。
-
 #### 2. concurrency & 3. race condition
 
 * use thread-safe packages if possble, like sync.Map
-* handle Map.Load/Store carefully, use LoadOrStore to prevent race conditions.
+* handle `Map.Load/Store` carefully, use `LoadOrStore` to prevent race conditions.
 
 ```go
 sm := sync.Map{}
