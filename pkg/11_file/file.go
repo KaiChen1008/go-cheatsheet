@@ -1,3 +1,3 @@
 package file
 
-// iterate a directory
+// TODO embed

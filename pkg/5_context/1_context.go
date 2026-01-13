@@ -22,5 +22,4 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	case <-ctx.Done():
 		http.Error(w, "canceled", http.StatusRequestTimeout)
 	}
-
 }

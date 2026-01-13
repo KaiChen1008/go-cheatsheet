@@ -16,7 +16,7 @@ type Cache struct {
 
 func NewMap() *Cache {
 	return &Cache{
-		mu:   sync.Mutex{},
+		// mu:   sync.Mutex{}, // a mutex does not need initialization.
 		data: make(map[string]string),
 	}
 }
