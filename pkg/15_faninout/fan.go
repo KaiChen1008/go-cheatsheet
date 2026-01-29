@@ -32,6 +32,7 @@ func FanOut() {
 	wg := sync.WaitGroup{}
 	ch := make(chan int, 10)
 
+	// sender
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
@@ -47,6 +48,7 @@ func FanOut() {
 		}
 	}
 
+	// receivers
 	for range 10 {
 		wg.Add(1)
 		go worker(&wg)

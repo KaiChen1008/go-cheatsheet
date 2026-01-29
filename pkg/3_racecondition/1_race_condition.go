@@ -27,3 +27,9 @@ func (c *Counter) Inc() {
 func IncAotmic() {
 	atomic.AddInt64(&counter, 1)
 }
+
+// correct way 3 - use atomic.Int64
+func IncAotmic2() {
+	var cnt atomic.Int64
+	cnt.Add(1)
+}
