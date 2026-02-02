@@ -17,6 +17,7 @@ func main() {
 	// gin.New() unlike gin.Default(), (conceptually) does not attach any middleware to the Engine.
 	r := gin.New()
 
+	// add middlewares
 	p := ginprom.New(ginprom.Engine(r)) // for prometheus
 	r.Use(
 		p.Instrument(),
