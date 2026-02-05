@@ -1,6 +1,10 @@
 package ginutil
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
 
 type Handler interface {
 	Create(c *gin.Context)
@@ -47,4 +51,36 @@ func (h *handler) HiV1(c *gin.Context) {
 		return
 	}
 	//....
+}
+
+// patch example
+type User struct {
+	Name  string `json:"name"`
+	Email string `json:"email"`
+}
+
+func PATCH() {
+	r := gin.Default()
+
+	// handle patch
+	// r.PATCH("/user/:id", func(c *gin.Context) {
+	r.PATCH("/user/:id/email", func(c *gin.Context) {
+		id := c.Param("id")
+		var user User
+
+		// bind json
+		if err := c.ShouldBindJSON(&user); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+
+		// partial updat (e.g. only update email)
+		c.JSON(http.StatusOK, gin.H{
+			"id":      id,
+			"message": "User updated (PATCH)",
+			"updated": user,
+		})
+	})
+
+	r.Run(":8080")
 }
