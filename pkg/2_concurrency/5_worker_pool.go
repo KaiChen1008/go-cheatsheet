@@ -41,6 +41,9 @@ func Run() {
 	close(jobs)
 
 	wg.Wait()
+
+	// if we don't close results -> fatal error: all goroutines are asleep - deadlock!
+	// since for range results keeps waiting the data until closing the channel
 	close(results)
 
 	for r := range results {
