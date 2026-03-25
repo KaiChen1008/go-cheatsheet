@@ -12,7 +12,30 @@ Token 流：
 
 	   ↑                     ↑
 	略過整塊              觸發 parseUsers()
+
 */
+
+/*
+decode process
+頂層：用 EOF
+
+	for {
+		token, err := decoder.Token()
+		if err != nil { break } // EOF
+		...
+	}
+
+array 內層：用 More()
+decoder.Token() // '['
+
+	for decoder.More() {
+		var item Item
+		decoder.Decode(&item)
+	}
+
+decoder.Token() // ']'
+*/
+
 type User struct {
 	ID    int
 	Name  string
@@ -62,6 +85,7 @@ func parseUsers(decoder *json.Decoder) []User {
 	}
 
 	// 逐筆讀取 array 裡的每個 object
+	// More() 回報目前正在遍歷的 array 或 object 裡，是否還有下一個元素。
 	for decoder.More() {
 		user, ok := parseUser(decoder)
 		if !ok {
