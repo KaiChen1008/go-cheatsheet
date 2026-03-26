@@ -14,7 +14,8 @@ func After(ch <-chan int) (int, error) {
 		// pitfall 1: overusing time.After inside a loop which can lead to memory leaks, as it creates a new timer on each iteration
 		// pitfall 2: "break" only break the "select" instead of the for loop
 		case <-time.After(time.Second):
-			break
+			// break
+			return 0, errors.New("timeout")
 		}
 	}
 }
