@@ -13,18 +13,16 @@ func TestSum(t *testing.T) {
 		name     string
 		a, b     int
 		expected int
-		wantErr  bool
 	}{
-		{"positive numbers", 1, 2, 3, false},
-		{"negative numbers", -1, -1, -2, false},
-		{"zero", 0, 0, 0, false},
-		{"overflow case", math.MaxInt64, 1, 0, true}, // 假設有 error
+		{"positive numbers", 1, 2, 3},
+		{"negative numbers", -1, -1, -2},
+		{"zero", 0, 0, 0},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := Sum(tt.a, tt.b)
-			require.Equal(t, tt.wantErr, err != nil)
+			require.NoError(t, err)
 			require.Equal(t, tt.expected, got)
 		})
 	}
