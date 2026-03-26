@@ -33,13 +33,19 @@ func FanOut() {
 	ch := make(chan int, 10)
 
 	// sender
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
+	// wg.Add(1)
+	// go func() {
+	// 	defer wg.Done()
+	// 	for i := range 100 {
+	// 		ch <- i
+	// 	}
+	// }()
+	wg.Go(func() {
+		defer close(ch)
 		for i := range 100 {
 			ch <- i
 		}
-	}()
+	})
 
 	worker := func(wg *sync.WaitGroup) {
 		defer wg.Done()
