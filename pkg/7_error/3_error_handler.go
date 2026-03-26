@@ -29,7 +29,7 @@ func (eh *ErrorHandler) RunWithRetry(ctx context.Context, inFn func() error) err
 	ticker := time.NewTicker(time.Second)
 	defer ticker.Stop()
 
-	for range eh.maxAttempts - 1 {
+	for i := range eh.maxAttempts - 1 {
 		select {
 		case <-ticker.C:
 			if err = inFn(); !eh.shouldRetry(err) {
@@ -37,7 +37,7 @@ func (eh *ErrorHandler) RunWithRetry(ctx context.Context, inFn func() error) err
 			}
 
 			// reset wait
-			waitTime := eh.nextWaitTime(eh.maxAttempts)
+			waitTime := eh.nextWaitTime(i)
 			ticker.Reset(waitTime)
 
 		case <-ctx.Done():
@@ -61,7 +61,7 @@ func (eh *ErrorHandler) shouldRetry(err error) bool {
 }
 
 func (eh *ErrorHandler) nextWaitTime(attempts int) time.Duration {
-	wait := eh.baseWait << (time.Duration(attempts - 1))
+	wait := eh.baseWait << time.Duration(attempts)
 	if wait > eh.maxWait {
 		return eh.maxWait
 	}
