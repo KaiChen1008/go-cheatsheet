@@ -12,11 +12,9 @@ func main() {
 	var wg sync.WaitGroup
 
 	for range 10 {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
+		wg.Go(func() {
 			value++
-		}()
+		})
 	}
 
 	wg.Wait()
